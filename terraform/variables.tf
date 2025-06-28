@@ -9,10 +9,10 @@ variable "create_vm" {
 #  type        = string
 #}
 
-variable "minikube_script_path" {
-  description = "Path to the install-minikube.sh script"
-  type        = string
-}
+#variable "minikube_script_path" {
+#  description = "Path to the install-minikube.sh script"
+#  type        = string
+#}
 
 # variable "location" {
 #  description = "Azure region for resource deployment"
