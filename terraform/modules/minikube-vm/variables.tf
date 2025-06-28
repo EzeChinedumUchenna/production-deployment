@@ -9,6 +9,12 @@ variable "create_vm" {
   default     = true
 }
 
+variable "location" {
+  description = "Location"
+  type        = string
+  default     = true
+}
+
 variable "vm_size" {
   description = "The size of the Virtual Machine"
   type        = string
