@@ -113,8 +113,9 @@ resource "azurerm_network_security_group" "minikube_nsg" {
 }
 
 resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
-  network_interface_id      = azurerm_network_interface.minikube_nic.id
-  network_security_group_id = azurerm_network_security_group.minikube_nsg.id
+  count                     = var.create_vm ? 1 : 0
+  network_interface_id      = azurerm_network_interface.minikube_nic[count.index].id
+  network_security_group_id = azurerm_network_security_group.minikube_nsg[count.index].id
 
   depends_on = [
     azurerm_network_security_group.minikube_nsg,
