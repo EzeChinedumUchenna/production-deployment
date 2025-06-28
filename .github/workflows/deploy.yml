@@ -36,11 +36,10 @@ jobs:
       - name: Build and push staging image
         run: |
           docker builder prune --all --force
-          docker build --no-cache -t ${{ env.DOCKER_IMAGE }}:${{ github.run_number }} .
+          docker build --no-cache -t ${{ env.DOCKER_IMAGE }}:${{ github.run_number }} -t ${{ env.DOCKER_IMAGE }}:latest .
+          
           docker push ${{ env.DOCKER_IMAGE }}:${{ github.run_number }}
-
-    # - name: Set up Python
-    #   uses: actions/setup-python@v2
+          docker push ${{ env.DOCKER_IMAGE }}:latest
 
   deploy-to-k8s:
     needs: checkout-build-push

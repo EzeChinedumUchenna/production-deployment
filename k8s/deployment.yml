@@ -24,7 +24,7 @@ spec:
         fsGroup: 2000
       containers:
       - name: fastapi-app
-        image: nedumdocker/fastapi-app:${{ github.run_number }}
+        image: nedumdocker/fastapi-app:$latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
