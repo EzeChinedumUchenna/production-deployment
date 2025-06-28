@@ -51,8 +51,6 @@ resource "azurerm_network_interface" "minikube_nic" {
     public_ip_address_id          = azurerm_public_ip.minikube_pip[0].id
   }
 
-  network_security_group_id = azurerm_network_security_group.minikube_nsg.id
-
   depends_on = [
     azurerm_subnet.minikube_subnet,
     azurerm_public_ip.minikube_pip,
@@ -112,4 +110,14 @@ resource "azurerm_network_security_group" "minikube_nsg" {
     Environment = "Dev"
     Purpose     = "Allow SSH to VM"
   }
+}
+
+resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
+  network_interface_id      = azurerm_network_interface.minikube_nic.id
+  network_security_group_id = azurerm_network_security_group.minikube_nsg.id
+
+  depends_on = [
+    azurerm_network_security_group.minikube_nsg
+    azurerm_network_interface.minikube_nic
+  ]
 }
