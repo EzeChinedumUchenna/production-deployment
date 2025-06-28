@@ -6,7 +6,7 @@ module "minikube_vm" {
   install_minikube   = false   # Only install Minikube when true
   
   # Required parameters
-  resource_group_name = "my-resource-group"
+  resource_group_name = "Rayda"
   # location           = "eastus"
   
   # Optional parameters with defaults
