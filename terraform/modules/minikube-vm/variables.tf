@@ -8,7 +8,19 @@ variable "minikube_script_path" {
   type        = string
 }
 
+variable "ssh_allowed_ip_cidr" {
+  description = "The IP range allowed to SSH into the VM"
+  type        = string
+  default     = "0.0.0.0/0" # ❗ Replace with your real IP CIDR for security
+}
+
 variable "create_vm" {
+  description = "Whether to create the VM and supporting resources"
+  type        = bool
+  default     = true
+}
+
+variable "create_nsg" {
   description = "Whether to create the VM and supporting resources"
   type        = bool
   default     = true

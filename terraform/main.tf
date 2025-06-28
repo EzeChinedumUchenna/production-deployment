@@ -2,7 +2,8 @@ module "minikube_vm" {
   source = "./modules/minikube-vm"
   
   # Toggle Minikube VM creation
-  create_vm = true  # Set to false to skip creation
+  create_vm = true  # Set to false to skip VM creation
+  create_nsg = true # Set to false to skip nsg creation
   install_minikube   = true   # Only install Minikube when true
   
   # Required parameters
@@ -13,9 +14,6 @@ module "minikube_vm" {
   vm_size          = "Standard_B2s"
   minikube_script_path = "../scripts/install-minikube.sh"
   admin_username   = "minikubeadmin"
+  ssh_allowed_ip_cidr = "0.0.0.0/0"
   ssh_public_key = var.ssh_public_key
-  tags = {
-    Environment = "Dev"
-    Purpose     = "K8s Testing"
-  }
 }
