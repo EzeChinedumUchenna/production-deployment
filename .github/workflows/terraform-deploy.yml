@@ -45,6 +45,8 @@ jobs:
 
       - name: ⚡ Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -input=false -no-color | tee apply.log
+        run: |
+          terraform force-unlock a0270d56-0ab7-e523-57c3-0fe75d515d9b
+          terraform apply -auto-approve -input=false -no-color | tee apply.log
         working-directory: ./terraform
 
