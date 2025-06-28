@@ -10,9 +10,9 @@ variable "create_vm" {
 }
 
 variable "location" {
-  description = "Location"
+  description = "Azure region for resource deployment"
   type        = string
-  default     = true
+  default     = "East US"
 }
 
 variable "vm_size" {
