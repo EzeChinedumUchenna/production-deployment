@@ -14,7 +14,7 @@ on:
 
 env:
   DOCKER_IMAGE: nedumdocker/fastapi-app
-  K8S_NAMESPACE: production
+  K8S_NAMESPACE: default
   VM_PUBLIC_IP: 172.191.135.200
 
 jobs:
@@ -68,4 +68,4 @@ jobs:
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           script: |
             kubectl apply -f ~/k8s/ -n default
-            kubectl rollout status deployment/fastapi-app -n default
+            kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
