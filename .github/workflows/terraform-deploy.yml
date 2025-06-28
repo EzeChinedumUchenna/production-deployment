@@ -1,4 +1,4 @@
-name: Terraform Deployment
+name: Terraform Deployment..
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - main
     paths:
       - terraform/**        # Pipleine trigger if anything under /terraform changes
-      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-deploy.yml
   pull_request:
     paths:
       - terraform/**
-      - .github/workflows/terraform.yml
+      - .github/workflows/terraform-deploy.yml
 
 jobs:
   terraform:
