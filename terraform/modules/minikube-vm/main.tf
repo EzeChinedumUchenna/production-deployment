@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
-  location = azurerm_resource_group.rg.location
+  location = var.location
 }
 
 resource "azurerm_linux_virtual_machine" "minikube_vm" {
