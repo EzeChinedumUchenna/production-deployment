@@ -12,7 +12,7 @@ module "minikube_vm" {
   # Optional parameters with defaults
   vm_size          = "Standard_B2s"
   admin_username   = "minikubeadmin"
-  ssh_public_key   = file("~/.ssh/id_rsa.pub")
+  ssh_public_key = var.ssh_public_key
   tags = {
     Environment = "Dev"
     Purpose     = "K8s Testing"
