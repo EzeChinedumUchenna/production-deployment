@@ -53,7 +53,7 @@ jobs:
         with:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.AZURE_PRIVATE_KEY }}
           source: "k8s/*"
           target: "~/k8s"
     
@@ -65,7 +65,7 @@ jobs:
         with:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.AZURE_PRIVATE_KEY }}
           script: |
             kubectl apply -f ~/k8s/ -n default
             kubectl rollout status deployment/fastapi-app -n default
