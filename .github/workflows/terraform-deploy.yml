@@ -32,7 +32,7 @@ jobs:
         working-directory: ./terraform
 
       - name: 🔍 Format Check
-        run: terraform fmt -check
+        run: terraform fmt -check -diff
         working-directory: ./terraform
 
       - name: 🧪 Terraform Validate
