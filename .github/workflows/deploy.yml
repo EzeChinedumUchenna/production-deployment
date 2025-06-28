@@ -1,4 +1,4 @@
-name: Deploy FastAPI App
+name: Deploy FastAPI App.
 
 on:
   push:
