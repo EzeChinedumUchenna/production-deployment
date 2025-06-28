@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - terraform/**        # Pipleine trigger if anything under /terraform changes
+      - .github/workflows/terraform.yml
   pull_request:
+    paths:
+      - terraform/**
+      - .github/workflows/terraform.yml
 
 jobs:
   terraform:
