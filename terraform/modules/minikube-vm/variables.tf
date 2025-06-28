@@ -3,6 +3,11 @@ variable "resource_group_name" {
   type        = string
 }
 
+variable "minikube_script_path" {
+  description = "Path to the install-minikube.sh script"
+  type        = string
+}
+
 variable "create_vm" {
   description = "Whether to create the VM and supporting resources"
   type        = bool

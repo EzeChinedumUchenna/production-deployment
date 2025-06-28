@@ -18,7 +18,7 @@ resource "azurerm_linux_virtual_machine" "minikube_vm" {
     username   = var.admin_username
     public_key = var.ssh_public_key
   }
-  custom_data = var.install_minikube ? base64encode(templatefile("${path.root}/scripts/install-minikube.sh", {
+  custom_data = var.install_minikube ? base64encode(templatefile(var.minikube_script_path, {
     admin_username = var.admin_username
   })) : null
 
