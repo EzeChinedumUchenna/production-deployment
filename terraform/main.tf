@@ -4,7 +4,7 @@ module "minikube_vm" {
   # Toggle Minikube VM creation
   create_vm = true  # Set to false to skip VM creation
   create_nsg = true # Set to false to skip nsg creation
-  install_minikube   = true   # Only install Minikube when true
+  install_minikube   = false   # Only install Minikube when true ..
   
   # Required parameters
   resource_group_name = "Rayda"
