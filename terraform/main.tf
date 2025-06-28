@@ -7,7 +7,7 @@ module "minikube_vm" {
   
   # Required parameters
   resource_group_name = "my-resource-group"
-  location           = "eastus"
+  # location           = "eastus"
   
   # Optional parameters with defaults
   vm_size          = "Standard_B2s"

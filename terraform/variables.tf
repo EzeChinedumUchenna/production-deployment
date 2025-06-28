@@ -9,11 +9,11 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "location" {
-  description = "Azure region for resource deployment"
-  type        = string
-  default     = "East US"
-}
+# variable "location" {
+#  description = "Azure region for resource deployment"
+#  type        = string
+#  default     = "East US"
+# }
 
 variable "vm_size" {
   description = "Size of the Azure Virtual Machine"
