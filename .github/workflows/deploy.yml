@@ -55,7 +55,7 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           source: "k8s/*"
-          target: "~/k8s"
+          target: "~/"
     
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
