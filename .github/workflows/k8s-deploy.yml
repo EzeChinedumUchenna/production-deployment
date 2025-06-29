@@ -12,6 +12,7 @@ on:
     paths:
       - k8s/**
       - .github/workflows/deploy.yml
+      - security/rbac.yml
 
 env:
   DOCKER_IMAGE: nedumdocker/fastapi-app
@@ -48,17 +49,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: 📂 Copy k8s manifests to VM
+      - name: Copy k8s manifests to VM
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
-          source: "k8s/*"
+          source: "k8s/* security/rbac.yml"
           target: "~/"
     
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
+
+      - name: Determine changed files
+        id: changed
+        run: |
+          git fetch origin main --depth=2
+          echo "changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_OUTPUT
       
       - name: 🚀 Deploy to Minikube on Azure VM
         uses: appleboy/ssh-action@v1.0.0
@@ -66,16 +73,16 @@ jobs:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
-          script: |
+          script: | 
             CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
       
-            if echo "$CHANGED_FILES" | grep -q "^k8s/"; then
+            if echo "$CHANGED" | grep -q "^k8s/"; then
               echo "Changes detected in k8s/, applying manifests..."
               kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
               kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
             fi
 
-            if echo "$CHANGED_FILES" | grep -q "^security/rbac.yml$"; then
+            if echo "$CHANGED" | grep -q "^security/rbac.yml$"; then
               echo "RBAC change detected, applying rbac manifest..."
               kubectl apply -f ~/security/rbac.yml -n ${{ env.K8S_NAMESPACE }}
               kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
