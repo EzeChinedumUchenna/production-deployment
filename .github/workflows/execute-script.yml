@@ -40,6 +40,7 @@ jobs:
         username: minikubeadmin
         key: ${{ secrets.AZURE_PRIVATE_KEY  }}
         script: |
-          chmod +x ~/${{ env.script }}
-          sudo bash ~/${{ env.script }}
-          sudo bash ~/${{ env.script }} | tee ~/install.log
+          set -e
+          chmod +x ~/scripts/${{ env.script }}
+          sudo bash ~/scripts/${{ env.script }}
+          sudo bash ~/scripts/${{ env.script }} | tee ~/install.log
