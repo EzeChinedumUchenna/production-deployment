@@ -5,16 +5,16 @@ on:
     branches:
       - main
     paths:
-      - scripts/install-nginx.sh        # Trigger when script is updated
+      - scripts/*        # Trigger when script is updated
       - .github/workflows/execute-script.yml
   pull_request:
     paths:
-      - k8s/**
-      - .github/workflows/deploy.yml
+      - scripts/*        # Trigger when script is updated
+      - .github/workflows/execute-script.yml
 
 env:
   VM_PUBLIC_IP: 172.191.135.200
-  script: install-nginx.sh
+  script: configure-nginx.sh
 
 jobs:
   deploy-script:
