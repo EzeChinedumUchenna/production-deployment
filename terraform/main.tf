@@ -12,7 +12,7 @@ module "minikube_vm" {
   
   # Optional parameters with defaults
   vm_size          = "Standard_B2s"
-  minikube_script_path = "../scripts/install-nginx.sh"
+  minikube_script_path = "../scripts/install-minikube.sh"
   admin_username   = "minikubeadmin"
   ssh_allowed_ip_cidr = "0.0.0.0/0"
   ssh_public_key = var.ssh_public_key
