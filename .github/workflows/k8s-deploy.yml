@@ -61,7 +61,6 @@ jobs:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
-          #source: "{k8s/*.yml,security/*.yml}"
           source: "k8s"
           target: "~/"
 
@@ -71,8 +70,8 @@ jobs:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
-          source: "security"
-          target: "~/"
+          source: "security/*.yml"
+          target: "~/k8s/"
     
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
@@ -90,17 +89,7 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           script: | 
-            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-      
-            if echo "$CHANGED" | grep -q "^k8s/"; then
-              echo "Changes detected in k8s/, applying manifests..."
-              kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
-              kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
-            fi
+            kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
+            kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
 
-            if echo "$CHANGED" | grep -q "^security/"; then
-              echo "RBAC change detected, applying rbac manifest..."
-              kubectl apply -f ~/security/ -n ${{ env.K8S_NAMESPACE }}
-              kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
-            fi
             
