@@ -14,7 +14,7 @@ on:
 
 env:
   VM_PUBLIC_IP: 172.191.135.200
-  script: configure-nginx.sh
+  script: configure-metricserver.sh
 
 jobs:
   deploy-script:
