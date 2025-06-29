@@ -32,6 +32,7 @@ jobs:
         key: ${{ secrets.AZURE_PRIVATE_KEY }}
         source: "{{ env.script }}"
         target: "~/"
+        strip_components: 1
 
     - name: Execute script on VM
       uses: appleboy/ssh-action@v1.0.0
