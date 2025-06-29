@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "📦 Installing metrics server via kubectl manifest..."
-/usr/local/bin/kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml --validate=false
+/usr/local/bin/kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml --validate=false -n prod
 
 echo "🚀 Enabling Minikube metrics-server addon (optional)..."
 minikube addons enable metrics-server

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fastapi-app
+  namespace: prod
   labels:
     app: fastapi-app
 spec:
