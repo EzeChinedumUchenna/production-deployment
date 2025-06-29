@@ -42,6 +42,7 @@ jobs:
           script: |
             set -e
             cd ~
-            chmod +x $(basename "${{ env.SCRIPT_PATH }}")
-            echo "Executing script: $(basename "${{ env.SCRIPT_PATH }}")"
-            sudo bash $(basename "${{ env.SCRIPT_PATH }}") | tee ~/install.log
+            script_file=$(basename "${{ env.SCRIPT_PATH }}")
+            chmod +x "$script_file"
+            echo "Executing script: $script_file"
+            sudo bash "$script_file" | tee ~/install.log
