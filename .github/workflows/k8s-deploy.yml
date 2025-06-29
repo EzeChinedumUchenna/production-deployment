@@ -130,7 +130,7 @@ env:
   DOCKER_IMAGE: nedumdocker/fastapi-app
   K8S_NAMESPACE: prod
   VM_PUBLIC_IP: 172.191.135.200
-  FILES_TO_DEPLOY: "configmap.yml hpa.yml"  # Space-separated list
+  FILES_TO_DEPLOY: "namespace.yml networkpolicy.yml serviceaccount.yml configmap.yml secret.yml hpa.yml service.yml ingress.yml deployment.yml"  # Space-separated list
 
 jobs:
   checkout-build-push:
