@@ -27,6 +27,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 2000
+        supplementalGroups: [1000]
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: fastapi-app
         image: nedumdocker/fastapi-app:latest
@@ -40,6 +43,13 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          privileged: false
+          capabilities:
+            drop:
+              - ALL
         livenessProbe:
           httpGet:
             path: /health

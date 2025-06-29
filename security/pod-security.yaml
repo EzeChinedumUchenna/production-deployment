@@ -1,0 +1,41 @@
+# security/gatekeeper-constraint.yml
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPPrivileged
+metadata:
+  name: psp-restricted
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - default
+  parameters:
+    privileged: false
+    allowPrivilegeEscalation: false
+    hostNetwork: false
+    hostIPC: false
+    hostPID: false
+    volumes:
+      - configMap
+      - emptyDir
+      - projected
+      - secret
+      - downwardAPI
+      - persistentVolumeClaim
+    runAsUser:
+      rule: MustRunAsNonRoot
+    requiredDropCapabilities:
+      - ALL
+    seLinux:
+      rule: RunAsAny
+    supplementalGroups:
+      rule: MustRunAs
+      ranges:
+        - min: 1000
+          max: 3000
+    fsGroup:
+      rule: MustRunAs
+      ranges:
+        - min: 1
+          max: 65535
