@@ -39,3 +39,9 @@ spec:
       ranges:
         - min: 1
           max: 65535
+
+
+
+
+          apiVersion: pod-security.admission.config.k8s.io/v1beta1
+kind: PodSecurityConfiguration
