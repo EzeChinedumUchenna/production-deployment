@@ -72,6 +72,7 @@ jobs:
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           source: "security/*"
           target: "~/k8s/"
+          strip_components: 1
     
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
