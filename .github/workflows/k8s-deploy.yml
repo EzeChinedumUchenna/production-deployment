@@ -70,7 +70,7 @@ jobs:
           host: ${{ env.VM_PUBLIC_IP }}
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
-          source: "security/*.yml"
+          source: "security/*"
           target: "~/k8s/"
     
       - name: Install kubectl
