@@ -43,7 +43,7 @@ jobs:
         run: |
           set -e
           cd ~
-          chmod -R +x scripts/
+          sudo chmod -R +x scripts/
           ./$(basename "${{ env.script }}") | tee ~/install.log
         #   set -e
         #   chmod +x ~/${{ env.script }}

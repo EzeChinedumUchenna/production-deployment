@@ -1,6 +1,6 @@
 
 #!/bin/bash
-kubectl label namespace secure-apps \
+kubectl label namespace default \
   pod-security.kubernetes.io/enforce=restricted \
   pod-security.kubernetes.io/enforce-version=latest \
   pod-security.kubernetes.io/audit=baseline \
