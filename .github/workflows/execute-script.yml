@@ -42,6 +42,6 @@ jobs:
           script: |
             set -e
             cd ~
-            chmod -R +x "scritp/*"
+            chmod -R +x "~/scritp"
             echo "Executing script: "${{ env.SCRIPT_PATH }}"
             sudo bash "${{ env.SCRIPT_PATH }}" | tee ~/install.log
