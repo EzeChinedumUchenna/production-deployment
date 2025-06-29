@@ -93,4 +93,7 @@ jobs:
             kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
             kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
 
+            echo "Listing services in ingress-nginx namespace:"
+            kubectl get svc -n ingress-nginx
+
             
