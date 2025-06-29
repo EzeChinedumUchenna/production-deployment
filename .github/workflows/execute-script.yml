@@ -14,7 +14,7 @@ on:
 
 env:
   VM_PUBLIC_IP: 172.191.135.200
-  script: scripts/install-gatekeeper.sh
+  script: scripts/apply-pod-security.sh
 
 jobs:
   deploy-script:
