@@ -1,4 +1,11 @@
 #!/bin/bash
-Install metric server - kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml 
+set -e
+
+echo "📦 Installing metrics server via kubectl manifest..."
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+echo "🚀 Enabling Minikube metrics-server addon (optional)..."
 minikube addons enable metrics-server
+
+echo "🔍 Checking metrics-server deployment status..."
 kubectl get deployment metrics-server -n kube-system
