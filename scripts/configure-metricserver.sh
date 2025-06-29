@@ -7,5 +7,5 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 echo "🚀 Enabling Minikube metrics-server addon (optional)..."
 minikube addons enable metrics-server
 
-echo "🔍 Checking metrics-server deployment status..."
+echo "🔍 Checking metrics-server deployment status.."
 kubectl get deployment metrics-server -n kube-system
