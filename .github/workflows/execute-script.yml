@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - scripts/${{ env.script }}        # Trigger when script is updated
+      - scripts/install-nginx.sh        # Trigger when script is updated
       - .github/workflows/execute-script.yml
   pull_request:
     paths:
@@ -42,3 +42,4 @@ jobs:
         script: |
           chmod +x ~/${{ env.script }}
           sudo bash ~/${{ env.script }}
+          sudo bash ~/${{ env.script }} | tee ~/install.log
