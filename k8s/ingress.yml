@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.yourdomain.com
+    - fastapi.com
     secretName: fastapi-tls
   rules:
-  - host: api.yourdomain.com
+  - host: fastapi.com
     http:
       paths:
       - path: /
