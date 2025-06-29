@@ -196,10 +196,19 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           run: |
+
+            echo "Starting deployment to Kubernetes..."
+
             for file in ${{ env.FILES_TO_DEPLOY }}; do
-              echo "Applying $file..."
+              echo "Applying file: ~/k8s/$file"
+              if [ ! -f ~/k8s/$file ]; then
+                echo "ERROR: File ~/k8s/$file not found!"
+                exit 1
+              fi
+
               kubectl apply -f ~/k8s/$file -n ${{ env.K8S_NAMESPACE }}
+              echo "✅ Successfully applied $file"
             done
 
-            echo "Waiting for rollout to complete..."
+            echo "Waiting for rollout of deployment/fastapi-app..."
             kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
