@@ -16,11 +16,11 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
 echo "Installing Prometheus (with Alertmanager)..."
-helm install prometheus prometheus-community/prometheus --namespace monitoring
-
-# Expose Prometheus
-kubectl expose service prometheus-server --type=NodePort --target-port=9090 \
-  --name=prometheus-server-np --namespace monitoring
+helm install prometheus-stack prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --set prometheus.service.type=NodePort \
+  --set grafana.service.type=NodePort \
+  --set alertmanager.service.type=NodePort
 
 # Expose Grafana
 kubectl expose service grafana --type=NodePort --target-port=3000 --name=grafana-np --namespace monitoring
