@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - k8s/**        # Pipleine trigger if anything under /k8s changes
+      - k8s/**        # Pipleine trigger if anything under /k8s changes,
       - .github/workflows/k8s-deploy.yml
       - security/rbac.yml
   pull_request:
