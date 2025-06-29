@@ -62,7 +62,7 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           #source: "{k8s/*.yml,security/*.yml}"
-          source: "./k8s ./security"
+          source: "k8s/*.yml security/rbac.yml"
           target: "~/"
     
       - name: Install kubectl
@@ -81,17 +81,6 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           script: | 
-            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-      
-            if echo "$CHANGED" | grep -q "^k8s/"; then
-              echo "Changes detected in k8s/, applying manifests..."
               kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
               kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
-            fi
-
-            if echo "$CHANGED" | grep -q "^security/rbac.yml$"; then
-              echo "RBAC change detected, applying rbac manifest..."
-              kubectl apply -f ~/security/rbac.yml -n ${{ env.K8S_NAMESPACE }}
-              kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
-            fi
             
