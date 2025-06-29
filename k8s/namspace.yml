@@ -1,6 +1,6 @@
 # namespace
 apiVersion: v1
-kind: Namespace
+kind: prod
 metadata:
   name: prod
   labels:
