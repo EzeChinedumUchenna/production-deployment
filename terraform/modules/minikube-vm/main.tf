@@ -102,7 +102,7 @@ resource "azurerm_network_security_group" "minikube_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = var.ssh_allowed_ip_cidr # e.g. "YOUR.IP.ADDR.0/32"
+    source_address_prefix      = var.ssh_allowed_ip_cidr # e.g. "YOUR.IP.ADDR.0/32."
     destination_address_prefix = "*"
   }
 
