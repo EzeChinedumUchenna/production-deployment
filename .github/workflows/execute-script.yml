@@ -14,7 +14,7 @@ on:
 
 env:
   VM_PUBLIC_IP: 172.191.135.200
-  script: scripts/configure-metricserver.sh
+  script: configure-metricserver.sh
 
 jobs:
   deploy-script:
@@ -30,7 +30,7 @@ jobs:
         host: ${{ env.VM_PUBLIC_IP }}
         username: minikubeadmin
         key: ${{ secrets.AZURE_PRIVATE_KEY }}
-        source: "{{ env.script }}"
+        source: "scripts/{{ env.script }}"
         target: "~/"
         strip_components: 1
 
@@ -42,6 +42,6 @@ jobs:
         key: ${{ secrets.AZURE_PRIVATE_KEY  }}
         script: |
           set -e
-          chmod +x ~/{{ env.script }}
-          sudo bash ~/{{ env.script }}
-          sudo bash ~/{{ env.script }} | tee ~/install.log
+          chmod +x ~/scripts/{{ env.script }}
+          sudo bash ~/scripts/{{ env.script }}
+          sudo bash ~/scripts/{{ env.script }} | tee ~/install.log
