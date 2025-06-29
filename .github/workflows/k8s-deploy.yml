@@ -16,8 +16,9 @@ on:
 
 env:
   DOCKER_IMAGE: nedumdocker/fastapi-app
-  K8S_NAMESPACE: default
+  K8S_NAMESPACE: prod
   VM_PUBLIC_IP: 172.191.135.200
+  file_path: ~/k8s/
 
 jobs:
   checkout-build-push:
@@ -90,7 +91,7 @@ jobs:
           username: minikubeadmin
           key: ${{ secrets.AZURE_PRIVATE_KEY }}
           script: | 
-            kubectl apply -f ~/k8s/ -n ${{ env.K8S_NAMESPACE }}
+            kubectl apply -f ${{ env.file_path }}} -n ${{ env.K8S_NAMESPACE }}
             kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
 
             echo "Listing services in ingress-nginx namespace:"
