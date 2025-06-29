@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+# Ensure Minikube is running
+if ! minikube status | grep -q "Running"; then
+  echo "❌ Minikube is not running. Please start it before executing this script."
+  exit 1
+fi
+
+# Check if helm is installed
+if ! command -v helm &> /dev/null; then
+  echo "⚙️ Installing Helm..."
+  curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+fi
+
 echo "Creating 'monitoring' namespace..."
 kubectl create namespace monitoring || echo "Namespace already exists"
 
