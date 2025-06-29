@@ -5,47 +5,43 @@ on:
     branches:
       - main
     paths:
-      - scripts/*        # Trigger when script is updated
+      - scripts/*  # Trigger when script is updated
       - .github/workflows/execute-script.yml
   pull_request:
     paths:
-      - scripts/*        # Trigger when script is updated
+      - scripts/*
       - .github/workflows/execute-script.yml
 
 env:
   VM_PUBLIC_IP: 172.191.135.200
-  script: scripts/monitoring.sh
+  SCRIPT_PATH: scripts/monitoring.sh
 
 jobs:
   deploy-script:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Upload script to VM
-      uses: appleboy/scp-action@v0.1.3
-      with:
-        host: ${{ env.VM_PUBLIC_IP }}
-        username: minikubeadmin
-        key: ${{ secrets.AZURE_PRIVATE_KEY }}
-        source: "${{ env.script }}"
-        target: "~/"
-        
+      - name: Upload script to VM
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ env.VM_PUBLIC_IP }}
+          username: minikubeadmin
+          key: ${{ secrets.AZURE_PRIVATE_KEY }}
+          source: "${{ env.SCRIPT_PATH }}"
+          target: "~/"
 
-    - name: Execute script on VM
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ env.VM_PUBLIC_IP }}
-        username: minikubeadmin
-        key: ${{ secrets.AZURE_PRIVATE_KEY  }}
-        run: |
-          set -e
-          cd ~
-          sudo chmod -R +x scripts/
-          ./$(basename "${{ env.script }}") | tee ~/install.log
-        #   set -e
-        #   chmod +x ~/${{ env.script }}
-        #   ./${{ env.script }} | tee ~/install.log
-        #  # sudo bash ~/${{ env.script }} | tee ~/install.log
+      - name: Execute script on VM
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ env.VM_PUBLIC_IP }}
+          username: minikubeadmin
+          key: ${{ secrets.AZURE_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            cd ~
+            chmod +x $(basename "${{ env.SCRIPT_PATH }}")
+            echo "Executing script: $(basename "${{ env.SCRIPT_PATH }}")"
+            sudo bash $(basename "${{ env.SCRIPT_PATH }}") | tee ~/install.log
