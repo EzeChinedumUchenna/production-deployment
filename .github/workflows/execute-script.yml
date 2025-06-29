@@ -1,0 +1,44 @@
+name: 🔁 Copy and Execute ${{ env.install-nginx }} Script on Azure VM
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/${{ env.install-nginx }}        # Pipleine trigger if anything under /k8s changes
+      - .github/workflows/execute-script.yml
+  pull_request:
+    paths:
+      - k8s/**
+      - .github/workflows/deploy.yml
+
+env:
+  VM_PUBLIC_IP: 172.191.135.200
+  install-nginx: install-nginx.sh
+
+jobs:
+  deploy-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Upload script to VM
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ env.VM_PUBLIC_IP }}
+        username: minikubeadmin
+        key: ${{ secrets.AZURE_PRIVATE_KEY }}
+        source: "scripts/${{ env.install-nginx }}"
+        target: "~/"
+
+    - name: Execute script on VM
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ env.VM_PUBLIC_IP }}
+        username: minikubeadmin
+        key: ${{ secrets.AZURE_PRIVATE_KEY  }}
+        script: |
+          chmod +x ~/${{ env.install-nginx }}
+          sudo bash ~/${{ env.install-nginx }}
