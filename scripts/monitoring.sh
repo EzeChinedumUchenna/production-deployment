@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-# Ensure Minikube is running
-if ! minikube status | grep -q "Running"; then
-  echo "❌ Minikube is not running. Please start it before executing this script."
-  exit 1
-fi
-
 # Check if helm is installed
 if ! command -v helm &> /dev/null; then
   echo "⚙️ Installing Helm..."
@@ -22,24 +16,36 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
 echo "Installing Prometheus (with Alertmanager)..."
-helm install prometheus prometheus-community/prometheus \
-  --namespace monitoring \
-  --set alertmanager.enabled=true \
-  --set alertmanager.persistentVolume.enabled=false \
-  --set server.persistentVolume.enabled=false
+helm install prometheus prometheus-community/prometheus --namespace monitoring
+
+# Expose Prometheus
+kubectl expose service prometheus-server --type=NodePort --target-port=9090 \
+  --name=prometheus-server-np --namespace monitoring
+
+# Expose Grafana
+kubectl expose service grafana --type=NodePort --target-port=3000 --name=grafana-np --namespace monitoring
+
+kubectl expose service prometheus-kube-state-metrics --type=NodePort \
+  --target-port=8080 --name=prometheus-kube-state-metrics-np --namespace monitoring
+
+kubectl get svc -n monitoring
+
+minikube addons enable ingress
 
 echo "Installing Loki Stack (Loki + Promtail)..."
 helm install loki grafana/loki-stack \
   --namespace monitoring \
+  helm install loki grafana/loki-stack \
+  --namespace monitoring \
+  --set grafana.enabled=false \
+  --set prometheus.enabled=false \
+  --set loki.persistence.enabled=true \
   --set promtail.enabled=true \
-  --set grafana.enabled=false
+
 
 echo "Installing Grafana..."
-helm install grafana grafana/grafana \
-  --namespace monitoring \
-  --set adminPassword='admin' \
-  --set service.type=NodePort \
-  --set persistence.enabled=false
+helm install grafana grafana/grafana --namespace monitoring
+
 
 echo "Waiting for Grafana to be ready..."
 kubectl wait --namespace monitoring \
