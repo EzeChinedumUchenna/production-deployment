@@ -98,7 +98,7 @@ jobs:
               kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
             fi
 
-            if echo "$CHANGED" | grep -q "^security/rbac.yml$"; then
+            if echo "$CHANGED" | grep -q "^security/"; then
               echo "RBAC change detected, applying rbac manifest..."
               kubectl apply -f ~/security/ -n ${{ env.K8S_NAMESPACE }}
               kubectl rollout status deployment/fastapi-app -n ${{ env.K8S_NAMESPACE }}
