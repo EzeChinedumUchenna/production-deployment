@@ -35,12 +35,14 @@ minikube addons enable ingress
 echo "Installing Loki Stack (Loki + Promtail)..."
 helm install loki grafana/loki-stack \
   --namespace monitoring \
-  helm install loki grafana/loki-stack \
-  --namespace monitoring \
-  --set grafana.enabled=false \
-  --set prometheus.enabled=false \
-  --set loki.persistence.enabled=true \
-  --set promtail.enabled=true \
+  --set promtail.enabled=true 
+
+# helm install loki grafana/loki-stack \
+#   --namespace monitoring \
+#   --set grafana.enabled=false \
+#   --set prometheus.enabled=false \
+#   --set loki.persistence.enabled=true \
+#   --set promtail.enabled=true \
 
 
 echo "Installing Grafana..."
