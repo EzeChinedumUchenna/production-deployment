@@ -43,5 +43,5 @@ jobs:
             set -e
             cd ~
             chmod -R +x "scripts/"
-            echo "Executing script: "${{ env.SCRIPT_PATH }}"
+            echo "Executing script: '${{ env.SCRIPT_PATH }}'"
             sudo bash "${{ env.SCRIPT_PATH }}" | tee ~/install.log
