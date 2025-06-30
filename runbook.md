@@ -53,3 +53,68 @@ kubectl label --overwrite ns prod \
 | Grafana    | grafana/grafana          | monitoring |
 | Loki       | grafana/loki-stack       | monitoring |
 
+#### Flags Highlights:
+Grafana admin password = admin
+Services exposed via NodePorts
+Promtail included to ship logs from pods to Loki
+
+## Reverse Proxy Exposure (VM-Level NGINX)
+FastAPI, Grafana, and Prometheus are reverse-proxied via:
+```
+server {
+    server {
+    listen 80 default_server;
+    server_name _;  #  _ for all domains
+
+    location / {
+        proxy_pass http://192.168.49.2:30991;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+
+    # Prometheus Proxy
+    location /prometheus/ {
+        proxy_pass http://192.168.49.2:30841/; 
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # Grafana Proxy
+    location /grafana/ {
+        proxy_pass http://192.168.49.2:39895/; 
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+```
+After Changes Run: ``` sudo nginx -t && sudo systemctl reload nginx ```
+
+## Accessing Dashboards & Services
+| Service    | URL                          | Credentials       |
+|------------|------------------------------|-------------------|
+| Grafana    | http://<vm-ip>/grafana/      | admin / admin     |
+| Prometheus | http://<vm-ip>/prometheus/   | –                 |
+| FastAPI    | http://<vm-ip>/fastapi/      | Exposed API       |
+
+## Logging & Metrics
+- Loki ingests all container logs via Promtail DaemonSet
+- Prometheus scrapes metrics from pods + node-exporter
+- Grafana configured to connect to both as data sources
+
+## Validation & Debugging
+Check services: 
+```
+kubectl get all -n monitoring
+kubectl get svc -n monitoring
+kubectl get ingress -A
+```
+## Tail logs using the command below or use grafana
+
+```
+kubectl logs -l app=fastapi-app -n prod
+```
+## Optional Enhancements
+Enable better persistence for Grafana & Prometheus
+Use cert-manager for TLS on Ingress
+Integrate Alertmanager with Slack/email/webhooks
