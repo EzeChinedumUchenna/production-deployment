@@ -5,7 +5,7 @@ This project automate the deployment of the FastAPI application into a Minikube-
    - Monitoring and observability with Prometheus, Grafana, and Loki
    - External traffic routing via NodePort and host-level NGINX reverse proxy
 
-## Kubernetes Infrastructure Setup
+## 1. Kubernetes Infrastructure Setup
 ### Minikube Installation (on Azure VM)
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -19,7 +19,7 @@ minikube addons enable ingress
 minikube addons enable metrics-server
 ```
 
-## Application Deployment (CI/CD)
+## 2. Application Deployment (CI/CD)
 ### GitHub Actions Workflow
 Triggered on changes to /k8s or /security. Key pipeline steps:
 - Docker builds tagged with run number and latest
@@ -30,8 +30,9 @@ Triggered on changes to /k8s or /security. Key pipeline steps:
 kubectl apply -f ...
 kubectl rollout status deployment/fastapi-app
 ```
+
+### FastAPI Deployment Files
 ```
-FastAPI Deployment Files
 configmap.yml
 hpa.yml
 deployment.yml
@@ -39,13 +40,13 @@ service.yml
 ```
 All deployed to the prod namespace on the cluster.
 
-## Pod Security Enforcement
+## 3. Pod Security Enforcement
 ### PSA Labels on Namespace -Ensures runAsNonRoot: true and Policy enforced in prod namespace via ClusterPolicy
 kubectl label --overwrite ns prod \
   pod-security.kubernetes.io/enforce=restricted \
   pod-security.kubernetes.io/enforce-version=latest
 
-## Monitoring Stack (Monitoring.sh Script or apply k8s yamls in monitoring/)
+## 4. Monitoring Stack (Monitoring.sh Script or apply k8s yamls in monitoring/)
 
 | Component  | Method                   | Namespace  |
 |------------|--------------------------|------------|
@@ -65,7 +66,7 @@ minikube service prometheus-service
 minikube service grafana-service
 ```
 
-## Logging Stack (monitoring/loki.yml)
+## 5. Logging Stack (monitoring/loki.yml)
 We centralized logging using Loki and integrate it with your existing Grafana setup deployed via YAML on Minikube. Here is what we did:
 - Deployed Loki using a YAML manifest.
 - Deployed Promtail (log collector for Loki).
