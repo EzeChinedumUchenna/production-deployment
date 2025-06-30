@@ -1,5 +1,5 @@
 #!/bin/bash
-# Simple Kubernetes Rollback Script
+
 # Usage: ./rollback.sh <deployment-name> <namespace>
 
 DEPLOYMENT=$1
