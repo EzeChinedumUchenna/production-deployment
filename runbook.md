@@ -1,12 +1,14 @@
 # FastAPI Production Deployment Runbook: FastAPI + Kubernetes + Observability Stack
 This project automate the deployment of the FastAPI application into a Minikube-based Kubernetes cluster running on an Azure VM. It integrates:
-   - Secure app deployment with GitHub Actions
+   - Provision Minikube (using Terraform) VM with GitHub Actions
+   - App deployment with GitHub Actions
    - Pod security policies
    - Monitoring and observability with Prometheus, Grafana, and Loki
    - External traffic routing via NodePort and host-level NGINX reverse proxy
 
 ## 1. Kubernetes Infrastructure Setup
 ### Minikube Installation (on Azure VM)
+We automated the process but you can configure Minikube using the below
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -21,7 +23,7 @@ minikube addons enable metrics-server
 
 ## 2. Application Deployment (CI/CD)
 ### GitHub Actions Workflow
-Triggered on changes to /k8s or /security. Key pipeline steps:
+Triggered on changes to /k8s or /security and /monitoring. Key pipeline steps:
 - Docker builds tagged with run number and latest
 - Image pushed to DockerHub
 - SSH into VM and deploy manifests with:
@@ -88,4 +90,28 @@ kubectl apply -f monitoring/grafana/
 You should start seeing logs from /var/log/*.log files on all nodes.
 ```
 
+## 6. Alerting
+Here alerts are generated and emailed when a monitored service is down.
 
+## Setup Summary
+- Service Monitored: /health endpoint
+- Alert Tool: Prometheus
+- Alert Delivery: Alertmanager
+- Notification: Email to ezechinedum504@gmail.com
+- Trigger: Service down for >30s (up == 0)
+
+### Alert Rule
+```bash
+- alert: ServiceDown
+  expr: up{job="health-endpoint"} == 0
+  for: 30s
+  ```
+**NOTE**: This alert triggers if the health-endpoint service is down (up == 0) for more than 30 seconds continuously.
+### Testing Steps
+- Stop the /health endpoint
+- Visit http://<minikube-ip>:30090/alerts
+- Check email inbox/spam
+
+### Troubleshooting
+No email > Check App Password and Alertmanager logs
+Alert not firing > Verify up metric in Prometheus Targets

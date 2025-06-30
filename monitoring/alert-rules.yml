@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+  labels:
+    role: alert-rules
+data:
+  alert-rules.yml: |
+    groups:
+      - name: ServiceAlerts
+        rules:
+          - alert: ServiceDown
+            expr: up{job="health-endpoint"} == 0
+            for: 30s
+            labels:
+              severity: critical
+            annotations:
+              summary: "Service is down"
+              description: "The service at health-endpoint has been unreachable for 30 seconds."

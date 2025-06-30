@@ -1,0 +1,72 @@
+# configmap
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  labels:
+    name: alertmanager-config
+data:
+  alertmanager.yml: |
+    global:
+      smtp_smarthost: 'smtp.gmail.com:587'
+      smtp_from: 'ezechinedum504@gmail.com'
+      smtp_auth_username: 'ezechinedum504@gmail.com' # I used my email
+      smtp_auth_password: 'My_PASSWORD'  
+      smtp_require_tls: true
+
+    route:
+      receiver: 'email-receiver'
+
+    receivers:
+      - name: 'email-receiver'
+        email_configs:
+          - to: 'ezechinedum504@gmail.com'
+            send_resolved: true
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+        - name: alertmanager
+          image: prom/alertmanager
+          args:
+            - '--config.file=/etc/alertmanager/alertmanager.yml'
+          ports:
+            - containerPort: 9093
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/alertmanager
+      volumes:
+        - name: config-volume
+          configMap:
+            name: alertmanager-config
+
+---
+
+#Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+spec:
+  selector:
+    app: alertmanager
+  ports:
+    - port: 9093
+      targetPort: 9093
+
+

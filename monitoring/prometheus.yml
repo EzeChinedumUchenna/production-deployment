@@ -1,3 +1,5 @@
+---
+#Configmap
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,6 +10,15 @@ data:
   prometheus.yml: |
     global:
       scrape_interval: 15s
+
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+              - alertmanager:9093
+
+    rule_files:
+      - /etc/prometheus/alert-rules.yml
 
     scrape_configs:
       - job_name: 'prometheus'
@@ -21,7 +32,7 @@ data:
 
 
 ---
-
+# Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,10 +57,16 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/prometheus/
+            - name: rules
+              mountPath: /etc/prometheus/alert-rules.yml
+              subPath: alert-rules.yml
       volumes:
         - name: config-volume
           configMap:
             name: prometheus-config
+        - name: rules
+          configMap:
+            name: prometheus-alert-rules
 
 ---
 
