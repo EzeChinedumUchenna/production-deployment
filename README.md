@@ -1,6 +1,6 @@
-# ☁️ Minikube VM Provisioning with Terraform on Azure
+# Production-Ready FastAPI Service Deployment
 
-This project automates the provisioning of an Azure Linux VM and installs Minikube using Terraform. It leverages GitHub Actions to deploy infrastructure, manage state securely, and enforce best practices.
+This project demonstrates how to deploy a FastAPI service in a production-ready Kubernetes environment using minikube. It includes security hardening, monitoring, CI/CD, and operational best practices.
 
 ---
 
