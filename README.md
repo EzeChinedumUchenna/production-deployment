@@ -7,11 +7,10 @@ This project demonstrates how to deploy a FastAPI service in a production-ready 
 
 - Azure Subscription
 - SSH key pair (`id_rsa`, `id_rsa.pub`)
-- minikube v1.30+
-- kubectl v1.28+
-- Docker 20.10+
-- Python 3.9+
-- Helm (for monitoring setup)
+- minikube
+- Terraform
+- Kubectl
+- Helm
 ---
 ## Features
 
@@ -51,18 +50,17 @@ This project demonstrates how to deploy a FastAPI service in a production-ready 
     By running this pipeline you would be deploying all service under k8s and security folder at a go . 
 
 
-
 ## Project Structure
 
-/rayda-assessment
-├── Dockerfile            # Multi-stage, security-hardened
-├── k8s/                 # Kubernetes manifests
-├── .github/workflows/   # CI/CD pipeline
-├── monitoring/          # Observability
-├── scripts/            # Automation
-├── security/           # Security policies
-├── README.md          # Deployment guide
-└── RUNBOOK.md        # Operations manual
-
----
+```text
+rayda-assessment/
+├── Dockerfile             # Multi-stage, security-hardened
+├── k8s/                   # Kubernetes manifests
+├── .github/workflows/     # CI/CD pipeline
+├── monitoring/            # Observability stack (Prometheus, Grafana, etc.)
+├── scripts/               # Automation scripts
+├── security/              # PodSecurityPolicies, RBAC, etc.
+├── README.md              # Deployment guide
+└── RUNBOOK.md             # Operations manual
+```
 
