@@ -10,10 +10,10 @@ Ensure the following are installed or configured:
 
 - ✅ Azure Subscription
 - ✅ SSH key pair (`id_rsa`, `id_rsa.pub`)
-- ✅ [Minikube](https://minikube.sigs.k8s.io/docs/)
-- ✅ [Terraform](https://www.terraform.io/)
-- ✅ [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- ✅ [Helm](https://helm.sh/)
+- ✅ Minikube
+- ✅ Terraform
+- ✅ kubectl
+- ✅ Helm
 
 ---
 
@@ -54,15 +54,15 @@ Ensure the following are installed or configured:
 
 ---
 
-## ⚡ Quick Start Guide
+## Quick Start Guide
 
-### 1. 🚀 Deploy Infrastructure (Azure VM + Minikube)
+### 1. Deploy Infrastructure (Azure VM + Minikube)
 Trigger the `terraform-deploy.yml` GitHub Actions pipeline. This will:
 
 - Provision an Azure VM using Terraform
 - SSH into the VM and run `install-minikube.sh` to install Minikube
 
-### 2. 🔧 Configure Environment (Metric Server, NGINX, Gatekeeper, Monitoring)
+### 2. Configure Environment (Metric Server, NGINX, Gatekeeper, Monitoring)
 Trigger the `execute-script.yml` pipeline to run the following scripts:
 
 - `configure-metricserver.sh`: Enables metrics for HPA
@@ -70,7 +70,7 @@ Trigger the `execute-script.yml` pipeline to run the following scripts:
 - `install-gatekeeper.sh`: Deploys OPA Gatekeeper for enforcing pod security
 - `monitoring.sh`: Installs Prometheus, Grafana, and Loki using Helm
 
-### 3. 📦 Deploy FastAPI and Kubernetes Resources
+### 3. Deploy FastAPI and Kubernetes Resources
 Still in `execute-script.yml`, the pipeline will:
 
 - Apply all Kubernetes manifests under `k8s/` and `security/`
@@ -78,7 +78,7 @@ Still in `execute-script.yml`, the pipeline will:
 
 ---
 
-## 🧭 Project Structure
+## Project Structure
 
 ```text
 rayda-assessment/
