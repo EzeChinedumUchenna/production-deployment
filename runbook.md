@@ -1,7 +1,9 @@
-
----
-
-## 🧾 `runbook.md`
+# FastAPI Production Deployment Runbook: FastAPI + Kubernetes + Observability Stack
+This project automate the deployment of the FastAPI application into a Minikube-based Kubernetes cluster running on an Azure VM. It integrates:
+   - Secure app deployment with GitHub Actions
+   - Pod security policies
+   - Monitoring and observability with Prometheus, Grafana, and Loki
+   - External traffic routing via NodePort and host-level NGINX reverse proxy
 
 ```markdown
 # 🛠️ Minikube VM Terraform Runbook
