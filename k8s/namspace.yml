@@ -1,4 +1,4 @@
-# namespace
+# namespace for prod
 apiVersion: v1
 kind: prod
 metadata:
@@ -10,3 +10,10 @@ metadata:
     pod-security.kubernetes.io/audit-version: latest
     pod-security.kubernetes.io/warn: baseline
     pod-security.kubernetes.io/warn-version: latest
+
+---
+# namespace for monitoring
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
