@@ -47,7 +47,9 @@ kubectl label --overwrite ns prod \
 
 ## Monitoring Stack (Monitoring.sh Script)
 
-**Component|	Method	            | Namespace**
-Prometheus |	prometheus-community |	monitoring
-Grafana	  |   grafana/grafana      | 	monitoring
-Loki	     | grafana/loki-stack	   | monitoring
+| Component  | Method                   | Namespace  |
+|------------|--------------------------|------------|
+| Prometheus | prometheus-community     | monitoring |
+| Grafana    | grafana/grafana          | monitoring |
+| Loki       | grafana/loki-stack       | monitoring |
+
