@@ -115,6 +115,6 @@ kubectl get ingress -A
 kubectl logs -l app=fastapi-app -n prod
 ```
 ## Optional Enhancements
-Enable better persistence for Grafana & Prometheus
-Use cert-manager for TLS on Ingress
-Integrate Alertmanager with Slack/email/webhooks
+- Enable better persistence for Grafana & Prometheus
+- Use cert-manager for TLS on Ingress
+- Integrate Alertmanager with Slack/email/webhooks
