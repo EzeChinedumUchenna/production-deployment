@@ -63,7 +63,7 @@ Trigger the `terraform-deploy.yml` GitHub Actions pipeline. This will:
 - SSH into the VM and run `install-minikube.sh` to install Minikube
 
 ### 2. Configure Environment (Metric Server, NGINX, Gatekeeper, Monitoring)
-Trigger the `execute-script.yml` pipeline (passing in the script you want to run) to run the following scripts:
+Trigger the `execute-script.yml` pipeline (passing in the script you want to execute) to run the following scripts:
 
 - `configure-metricserver.sh`: Enables metrics for HPA
 - `install-nginx.sh`: Installs and configures NGINX for ingress from Azure VM → Minikube
