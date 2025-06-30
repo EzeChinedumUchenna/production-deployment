@@ -45,7 +45,7 @@ kubectl label --overwrite ns prod \
   pod-security.kubernetes.io/enforce=restricted \
   pod-security.kubernetes.io/enforce-version=latest
 
-## Monitoring Stack (Monitoring.sh Script)
+## Monitoring Stack (Monitoring.sh Script or apply k8s yamls in monitoring/)
 
 | Component  | Method                   | Namespace  |
 |------------|--------------------------|------------|
@@ -53,68 +53,38 @@ kubectl label --overwrite ns prod \
 | Grafana    | grafana/grafana          | monitoring |
 | Loki       | grafana/loki-stack       | monitoring |
 
-#### Flags Highlights:
-Grafana admin password = admin
-Services exposed via NodePorts
-Promtail included to ship logs from pods to Loki
-
-## Reverse Proxy Exposure (VM-Level NGINX)
-FastAPI, Grafana, and Prometheus are reverse-proxied via:
+### To Apply
+```bash
+kubectl apply -f monitoring/prometheus/
+kubectl apply -f monitoring/grafana/
 ```
-server {
-    server {
-    listen 80 default_server;
-    server_name _;  #  _ for all domains
-
-    location / {
-        proxy_pass http://192.168.49.2:30991;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-    }
-
-    # Prometheus Proxy
-    location /prometheus/ {
-        proxy_pass http://192.168.49.2:30841/; 
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    # Grafana Proxy
-    location /grafana/ {
-        proxy_pass http://192.168.49.2:39895/; 
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP \$remote_addr;
-    }
-}
+**Note:** For Now we are only monitoring the availabilty of the service uptime (i.e., whether an HTTP /health endpoint is reachable), not full cluster-level metrics like CPU, memory, disk usage, pod counts, etc. so no Node Exporter is scrapping the OS-level metrics
+### Access Services in Minikube
+```bash
+minikube service prometheus-service
+minikube service grafana-service
 ```
-After Changes Run: ``` sudo nginx -t && sudo systemctl reload nginx ```
 
-## Accessing Dashboards & Services
-| Service    | URL                          | Credentials       |
-|------------|------------------------------|-------------------|
-| Grafana    | http://<vm-ip>/grafana/      | admin / admin     |
-| Prometheus | http://<vm-ip>/prometheus/   | –                 |
-| FastAPI    | http://<vm-ip>/fastapi/      | Exposed API       |
+## Logging Stack (monitoring/loki.yml)
+We centralized logging using Loki and integrate it with your existing Grafana setup deployed via YAML on Minikube. Here is what we did:
+- Deployed Loki using a YAML manifest.
+- Deployed Promtail (log collector for Loki).
+- Configured Loki as a datasource in Grafana using a ConfigMap.
 
-## Logging & Metrics
-- Loki ingests all container logs via Promtail DaemonSet
-- Prometheus scrapes metrics from pods + node-exporter
-- Grafana configured to connect to both as data sources
+### To apply the setup
+```bash
+kubectl apply -f monitoring/loki/
+kubectl apply -f monitoring/promtail/
+kubectl apply -f monitoring/grafana/
+```
+### Verify
+- Run minikube ```service grafana-service``` to get Grafana URL.
+- Login with admin / admin.
+- Go to Explore, choose Loki as the datasource.
+- Run a query like:
+```
+{job="varlogs"}
+You should start seeing logs from /var/log/*.log files on all nodes.
+```
 
-## Validation & Debugging
-Check services: 
-```
-kubectl get all -n monitoring
-kubectl get svc -n monitoring
-kubectl get ingress -A
-```
-## Tail logs using the command below or use grafana
 
-```
-kubectl logs -l app=fastapi-app -n prod
-```
-## Optional Enhancements
-- Enable better persistence for Grafana & Prometheus
-- Use cert-manager for TLS on Ingress
-- Integrate Alertmanager with Slack/email/webhooks
