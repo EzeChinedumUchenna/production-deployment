@@ -113,5 +113,7 @@ Here alerts are generated and emailed when a monitored service is down.
 - Check email inbox/spam
 
 ### Troubleshooting
+```
 No email > Check App Password and Alertmanager logs
 Alert not firing > Verify up metric in Prometheus Targets
+```
