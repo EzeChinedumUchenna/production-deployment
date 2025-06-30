@@ -1,66 +1,92 @@
-# Production-Ready FastAPI Service Deployment
+# Production-Ready FastAPI Service Deployment on Kubernetes
 
-This project demonstrates how to deploy a FastAPI service in a production-ready Kubernetes environment using minikube. It includes security hardening, monitoring, CI/CD, and operational best practices.
+This project demonstrates how to deploy a FastAPI service in a **production-ready Kubernetes environment** using Minikube on an Azure VM. It incorporates best practices in **security hardening**, **observability**, **CI/CD**, and **infrastructure automation**.
 
 ---
+
 ## Prerequisites
 
-- Azure Subscription
-- SSH key pair (`id_rsa`, `id_rsa.pub`)
-- minikube
-- Terraform
-- Kubectl
-- Helm
----
-## Features
+Ensure the following are installed or configured:
 
-- Deployment of the infrastructure and minikube using Terraform Modular, reusable Terraform layout and best practices
-- Multi-stage Docker build with security scanning
-- Secure configuration using GitHub Secrets, SSH key injected securely into the server
-- Network Security Group (NSG) with controlled SSH ingress and other Access
-- Set up all k8s service at a run
-- Security of Pod Access using - Network policy, service account, Network policy and Pod security policy
-- Monitoring stack with Prometheus/Grafana
-- Logging using Loki and Grafana for visualization
-- GitHub Actions CI/CD pipeline
-- Security hardening:
-    - Non-root container user
-    - Pod security policies
-    - Secrets management
-- Kubernetes deployment with:
-    - Resource limits and requests
-    - Liveness/readiness probes
-    - Horizontal Pod Autoscaler
-    - Network policies
+- ✅ Azure Subscription
+- ✅ SSH key pair (`id_rsa`, `id_rsa.pub`)
+- ✅ [Minikube](https://minikube.sigs.k8s.io/docs/)
+- ✅ [Terraform](https://www.terraform.io/)
+- ✅ [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- ✅ [Helm](https://helm.sh/)
 
 ---
-## Quick Start
 
-1. **Execute the terraform-deploy.yml using the terraform-deploy.yml pipeline**
-   This pipeline install Azure VM using terraform and install minikube( using "install-minikube.sh" script). See below
- 
-2. **Run Configuration Scripts using the execute-script pipeline:**
-   The following scripts (configure-metricserver.sh, configure-nginx.sh, install-gateekeeper.sh, monitoring.sh, install-nginx.sh)
-   - configures the metric server need for the HPA to get the CPU metric.
-   - Install Nginx on the server and configure nginx for proper routing of the external traffic into the Minikube VM from the Azure VM(Host VM)
-   - Install gatekeep for Pod security policy since PSP has been deprecated
-   - Install monitoring using helm
-     
- 3. **Deploy all the kubernetes service using the execute-script.yml pipeline**
-    By running this pipeline you would be deploying all service under k8s and security folder at a go . 
+## ✅ Key Features
 
+- **Infrastructure-as-Code**:
+  - Azure VM and Minikube provisioned via modular, reusable Terraform modules
+  - NSG (Network Security Group) with restricted SSH and port access
 
-## Project Structure
+- **Secure Docker Image Build**:
+  - Multi-stage build
+  - Security-hardened base image
+  - Built and pushed using GitHub Actions
+
+- **Kubernetes Deployment**:
+  - Resource limits and requests
+  - Liveness and readiness probes
+  - Horizontal Pod Autoscaler (HPA)
+  - Pod Security Admission (via OPA Gatekeeper)
+  - Network Policies
+  - Service Account scoping
+
+- **Security Hardening**:
+  - Runs as non-root user
+  - Privilege escalation disabled
+  - PSP migration using OPA Gatekeeper
+  - Secrets and config management via Kubernetes Secrets and ConfigMaps
+
+- **CI/CD Pipeline (GitHub Actions)**:
+  - Docker image build and push
+  - SCP deployment to remote VM
+  - Kubernetes manifests applied remotely
+
+- **Monitoring and Logging**:
+  - Prometheus & Grafana for metrics
+  - Loki for centralized logging
+  - Dashboards and alerts included
+
+---
+
+## ⚡ Quick Start Guide
+
+### 1. 🚀 Deploy Infrastructure (Azure VM + Minikube)
+Trigger the `terraform-deploy.yml` GitHub Actions pipeline. This will:
+
+- Provision an Azure VM using Terraform
+- SSH into the VM and run `install-minikube.sh` to install Minikube
+
+### 2. 🔧 Configure Environment (Metric Server, NGINX, Gatekeeper, Monitoring)
+Trigger the `execute-script.yml` pipeline to run the following scripts:
+
+- `configure-metricserver.sh`: Enables metrics for HPA
+- `install-nginx.sh`: Installs and configures NGINX for ingress from Azure VM → Minikube
+- `install-gatekeeper.sh`: Deploys OPA Gatekeeper for enforcing pod security
+- `monitoring.sh`: Installs Prometheus, Grafana, and Loki using Helm
+
+### 3. 📦 Deploy FastAPI and Kubernetes Resources
+Still in `execute-script.yml`, the pipeline will:
+
+- Apply all Kubernetes manifests under `k8s/` and `security/`
+- Ensure services, deployments, RBAC, and security controls are in place
+
+---
+
+## 🧭 Project Structure
 
 ```text
 rayda-assessment/
-├── Dockerfile             # Multi-stage, security-hardened
-├── k8s/                   # Kubernetes manifests
-├── .github/workflows/     # CI/CD pipeline
-├── monitoring/            # Observability stack (Prometheus, Grafana, etc.)
-├── scripts/               # Automation scripts
-├── security/              # PodSecurityPolicies, RBAC, etc.
-├── README.md              # Deployment guide
-└── RUNBOOK.md             # Operations manual
-```
-
+├── Dockerfile             # Multi-stage, security-hardened FastAPI image
+├── k8s/                   # Kubernetes manifests (Deployments, Services, Ingress, etc.)
+├── .github/workflows/     # GitHub Actions CI/CD workflows
+├── monitoring/            # Helm charts for Prometheus, Grafana, Loki
+├── scripts/               # Automation scripts (Terraform, Minikube, Monitoring)
+├── security/              # RBAC, Gatekeeper templates, NetworkPolicies
+├── README.md              # This file – project overview and instructions
+└── RUNBOOK.md             # Operational handbook for production troubleshooting
